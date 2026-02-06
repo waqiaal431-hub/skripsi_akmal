@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Data Input - Monitoring Meteorologi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
+    <!-- Sidebar -->
+    <div class="sidebar fixed left-0 top-0 h-full w-64 p-6">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-white mb-2">Data Input</h1>
+            <p class="text-gray-400 text-sm">Sistem Meteorologi</p>
+        </div>
+        
+        <nav class="space-y-2">
+            <a href="dashboard.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-white">
+                <i class="fas fa-chart-pie w-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="input-data.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white">
+                <i class="fas fa-keyboard w-5"></i>
+                <span>Input Data</span>
+            </a>
+            <a href="laporan.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white">
+                <i class="fas fa-file-alt w-5"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="../index.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white mt-8">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span>Keluar</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="ml-64 p-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-white mb-2">Dashboard Ringkasan</h2>
+            <p class="text-gray-400">Ringkasan data yang telah diinput</p>
+        </div>
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-check-circle text-green-400 text-xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm mb-1">Total Input Hari Ini</h3>
+                <p class="text-3xl font-bold text-white" id="todayInput">0</p>
+                <p class="text-gray-500 text-xs mt-2">Data</p>
+            </div>
+            
+            <div class="stat-card glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-calendar-week text-blue-400 text-xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm mb-1">Total Input Minggu Ini</h3>
+                <p class="text-3xl font-bold text-white" id="weekInput">0</p>
+                <p class="text-gray-500 text-xs mt-2">Data</p>
+            </div>
+            
+            <div class="stat-card glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-calendar-alt text-purple-400 text-xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm mb-1">Total Input Bulan Ini</h3>
+                <p class="text-3xl font-bold text-white" id="monthInput">0</p>
+                <p class="text-gray-500 text-xs mt-2">Data</p>
+            </div>
+            
+            <div class="stat-card glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-clock text-yellow-400 text-xl"></i>
+                    </div>
+                </div>
+                <h3 class="text-gray-400 text-sm mb-1">Input Terakhir</h3>
+                <p class="text-lg font-bold text-white" id="lastInput">-</p>
+                <p class="text-gray-500 text-xs mt-2">Waktu</p>
+            </div>
+        </div>
+        
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Statistik Input Harian</h3>
+                <div class="chart-container">
+                    <canvas id="dailyInputChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Distribusi Input per Jam</h3>
+                <div class="chart-container">
+                    <canvas id="hourlyInputChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Inputs -->
+        <div class="glass-card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Input Terbaru</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-700">
+                            <th class="pb-4 text-gray-300 font-semibold">Tanggal & Waktu</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Suhu (°C)</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Kelembaban (%)</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Curah Hujan (mm)</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentInputsBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/data-simulation.js"></script>
+    <script src="../js/charts.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
+

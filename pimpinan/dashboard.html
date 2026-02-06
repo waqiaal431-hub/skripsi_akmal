@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Pimpinan - Monitoring Meteorologi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
+    <!-- Sidebar -->
+    <div class="sidebar fixed left-0 top-0 h-full w-64 p-6">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-white mb-2">Monitoring</h1>
+            <p class="text-gray-400 text-sm">Sistem Meteorologi</p>
+        </div>
+        
+        <nav class="space-y-2">
+            <a href="dashboard.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-white">
+                <i class="fas fa-chart-line w-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="laporan.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white">
+                <i class="fas fa-file-alt w-5"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="manajemen-pengguna.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white">
+                <i class="fas fa-users w-5"></i>
+                <span>Manajemen Pengguna</span>
+            </a>
+            <a href="../index.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white mt-8">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span>Keluar</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="ml-64 p-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-white mb-2">Dashboard Monitoring</h2>
+            <p class="text-gray-400">Ringkasan data observasi meteorologi terkini</p>
+        </div>
+        
+        <!-- Stat Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-thermometer-half text-red-400 text-xl"></i>
+                    </div>
+                    <span class="text-gray-400 text-sm" id="temp-time">-</span>
+                </div>
+                <h3 class="text-gray-400 text-sm mb-1">Suhu Udara</h3>
+                <p class="text-3xl font-bold text-white" id="temperature">-</p>
+                <div class="flex items-center gap-2 mt-2">
+                    <p class="text-gray-500 text-xs">°C</p>
+                    <span class="text-xs px-2 py-1 rounded-full" id="temp-comparison-badge">-</span>
+                </div>
+                <p class="text-gray-500 text-xs mt-1">Normal: <span id="temp-normal">-</span>°C</p>
+            </div>
+            
+            <div class="stat-card glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-tint text-blue-400 text-xl"></i>
+                    </div>
+                    <span class="text-gray-400 text-sm" id="humidity-time">-</span>
+                </div>
+                <h3 class="text-gray-400 text-sm mb-1">Kelembaban</h3>
+                <p class="text-3xl font-bold text-white" id="humidity">-</p>
+                <div class="flex items-center gap-2 mt-2">
+                    <p class="text-gray-500 text-xs">%</p>
+                    <span class="text-xs px-2 py-1 rounded-full" id="humidity-comparison-badge">-</span>
+                </div>
+                <p class="text-gray-500 text-xs mt-1">Normal: <span id="humidity-normal">-</span>%</p>
+            </div>
+            
+            <div class="stat-card glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-cloud-rain text-cyan-400 text-xl"></i>
+                    </div>
+                    <span class="text-gray-400 text-sm" id="rainfall-time">-</span>
+                </div>
+                <h3 class="text-gray-400 text-sm mb-1">Curah Hujan</h3>
+                <p class="text-3xl font-bold text-white" id="rainfall">-</p>
+                <div class="flex items-center gap-2 mt-2">
+                    <p class="text-gray-500 text-xs">mm</p>
+                    <span class="text-xs px-2 py-1 rounded-full" id="rainfall-comparison-badge">-</span>
+                </div>
+                <p class="text-gray-500 text-xs mt-1">Normal: <span id="rainfall-normal">-</span>mm</p>
+            </div>
+            
+            <div class="stat-card glass-card rounded-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-wind text-green-400 text-xl"></i>
+                    </div>
+                    <span class="text-gray-400 text-sm" id="wind-time">-</span>
+                </div>
+                <h3 class="text-gray-400 text-sm mb-1">Kecepatan Angin</h3>
+                <p class="text-3xl font-bold text-white" id="windSpeed">-</p>
+                <p class="text-gray-500 text-xs mt-2">km/jam</p>
+            </div>
+        </div>
+        
+        <!-- Charts Row 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Line Chart -->
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Trend Suhu & Kelembaban</h3>
+                <div class="chart-container">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Bar Chart -->
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4">Curah Hujan Harian</h3>
+                <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Comparison Section -->
+        <div class="glass-card rounded-xl p-6 mb-6">
+            <h3 class="text-xl font-bold text-white mb-4">Perbandingan dengan Normal</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Comparison Chart -->
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-300 mb-3">Data Saat Ini vs Normal</h4>
+                    <div class="chart-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Monthly Rainfall Comparison -->
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-300 mb-3">Curah Hujan Bulanan</h4>
+                    <div class="space-y-4">
+                        <div class="bg-white/5 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-300">Bulan Ini (Proyeksi)</span>
+                                <span class="text-white font-bold text-lg" id="monthly-rainfall-current">-</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-400 text-sm">Normal Bulanan</span>
+                                <span class="text-gray-300 text-sm" id="monthly-rainfall-normal">-</span>
+                            </div>
+                            <div class="mt-3">
+                                <div class="flex justify-between text-xs text-gray-400 mb-1">
+                                    <span>Selisih</span>
+                                    <span id="monthly-rainfall-diff">-</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="h-2 rounded-full" id="monthly-rainfall-bar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="bg-white/5 rounded-lg p-3">
+                                <p class="text-gray-400 text-xs mb-1">Hari Berlalu</p>
+                                <p class="text-white font-bold" id="days-elapsed">-</p>
+                            </div>
+                            <div class="bg-white/5 rounded-lg p-3">
+                                <p class="text-gray-400 text-xs mb-1">Total Hari</p>
+                                <p class="text-white font-bold" id="days-in-month">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row 2 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <!-- Gauge Charts -->
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4 text-center">Suhu</h3>
+                <div class="flex justify-center">
+                    <canvas id="gaugeTemp" width="200" height="200"></canvas>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4 text-center">Kelembaban</h3>
+                <div class="flex justify-center">
+                    <canvas id="gaugeHumidity" width="200" height="200"></canvas>
+                </div>
+            </div>
+            
+            <div class="glass-card rounded-xl p-6">
+                <h3 class="text-xl font-bold text-white mb-4 text-center">Tekanan</h3>
+                <div class="flex justify-center">
+                    <canvas id="gaugePressure" width="200" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Pie Chart -->
+        <div class="glass-card rounded-xl p-6">
+            <h3 class="text-xl font-bold text-white mb-4">Distribusi Data</h3>
+            <div class="chart-container">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/data-simulation.js"></script>
+    <script src="../js/charts.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
+

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STASIUN METEOROLOGI SANGIA NIBANDERA KOLAKA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .info-board {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        }
+        
+        .slide {
+            display: none;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .digital-clock {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+        }
+        
+        .running-text-container {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .running-text {
+            display: inline-block;
+            animation: scroll 30s linear infinite;
+        }
+        
+        @keyframes scroll {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        
+        .large-stat {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+        
+        .medium-stat {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-board">
+        <!-- Header dengan Jam Digital dan Running Text -->
+        <div class="glass-card-strong border-b border-white/10 p-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">STASIUN METEOROLOGI SANGIA NIBANDERA KOLAKA</h1>
+                    <p class="text-gray-300" id="currentDate">-</p>
+                </div>
+                <div class="text-right">
+                    <div class="digital-clock text-6xl text-blue-400 mb-2" id="digitalClock">00:00:00</div>
+                    <div class="text-gray-300 text-sm" id="clockDate">-</div>
+                </div>
+            </div>
+            
+            <!-- Running Text -->
+            <div class="mt-4 running-text-container bg-blue-500/20 rounded-lg p-3">
+                <div class="running-text text-white text-lg font-semibold">
+                    <i class="fas fa-info-circle mr-3"></i>
+                    <span id="runningText">Sistem Monitoring Meteorologi - Data diperbarui setiap 5 detik - Informasi real-time cuaca dan iklim</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slideshow Container -->
+        <div class="relative h-[calc(100vh-200px)] overflow-hidden">
+            <!-- Slide 1: Overview Stats -->
+            <div class="slide active absolute inset-0 p-8">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 h-full">
+                    <div class="glass-card rounded-2xl p-8 flex flex-col items-center justify-center">
+                        <i class="fas fa-thermometer-half text-6xl text-red-400 mb-4"></i>
+                        <p class="text-gray-300 text-xl mb-2">Suhu Udara</p>
+                        <p class="large-stat text-white" id="slide1-temp">-</p>
+                        <p class="text-gray-400 text-2xl mt-2">°C</p>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-500 text-lg">Normal: <span class="text-gray-300 font-semibold" id="slide1-temp-normal">-</span>°C</p>
+                            <span class="inline-block mt-2 px-4 py-1 rounded-full text-sm font-semibold" id="slide1-temp-badge">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-8 flex flex-col items-center justify-center">
+                        <i class="fas fa-tint text-6xl text-blue-400 mb-4"></i>
+                        <p class="text-gray-300 text-xl mb-2">Kelembaban</p>
+                        <p class="large-stat text-white" id="slide1-humidity">-</p>
+                        <p class="text-gray-400 text-2xl mt-2">%</p>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-500 text-lg">Normal: <span class="text-gray-300 font-semibold" id="slide1-humidity-normal">-</span>%</p>
+                            <span class="inline-block mt-2 px-4 py-1 rounded-full text-sm font-semibold" id="slide1-humidity-badge">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-8 flex flex-col items-center justify-center">
+                        <i class="fas fa-cloud-rain text-6xl text-cyan-400 mb-4"></i>
+                        <p class="text-gray-300 text-xl mb-2">Curah Hujan</p>
+                        <p class="large-stat text-white" id="slide1-rainfall">-</p>
+                        <p class="text-gray-400 text-2xl mt-2">mm</p>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-500 text-lg">Normal: <span class="text-gray-300 font-semibold" id="slide1-rainfall-normal">-</span>mm</p>
+                            <span class="inline-block mt-2 px-4 py-1 rounded-full text-sm font-semibold" id="slide1-rainfall-badge">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-8 flex flex-col items-center justify-center">
+                        <i class="fas fa-wind text-6xl text-green-400 mb-4"></i>
+                        <p class="text-gray-300 text-xl mb-2">Kecepatan Angin</p>
+                        <p class="large-stat text-white" id="slide1-wind">-</p>
+                        <p class="text-gray-400 text-2xl mt-2">km/jam</p>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-500 text-lg">Normal: <span class="text-gray-300 font-semibold" id="slide1-wind-normal">-</span> km/jam</p>
+                            <span class="inline-block mt-2 px-4 py-1 rounded-full text-sm font-semibold" id="slide1-wind-badge">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2: Detailed Charts -->
+            <div class="slide absolute inset-0 p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                    <div class="glass-card rounded-2xl p-6">
+                        <h3 class="text-2xl font-bold text-white mb-4">Trend Suhu & Kelembaban</h3>
+                        <div class="mb-3 text-center text-sm">
+                            <span class="text-gray-400">Normal: Suhu <span class="text-gray-300 font-semibold" id="slide2-temp-normal">-</span>°C | Kelembaban <span class="text-gray-300 font-semibold" id="slide2-humidity-normal">-</span>%</span>
+                        </div>
+                        <div style="height: calc(100% - 90px);">
+                            <canvas id="slide2-lineChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-6">
+                        <h3 class="text-2xl font-bold text-white mb-4">Curah Hujan Harian</h3>
+                        <div class="mb-3 text-center">
+                            <span class="text-gray-400 text-sm">Normal: <span class="text-gray-300 font-semibold" id="slide2-rainfall-normal">-</span> mm/hari</span>
+                        </div>
+                        <div style="height: calc(100% - 90px);">
+                            <canvas id="slide2-barChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3: Gauge Charts -->
+            <div class="slide absolute inset-0 p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+                    <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center">
+                        <h3 class="text-2xl font-bold text-white mb-4">Suhu</h3>
+                        <canvas id="slide3-gaugeTemp" width="300" height="300"></canvas>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-500 text-lg">Normal: <span class="text-gray-300 font-semibold" id="slide3-temp-normal">-</span>°C</p>
+                            <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold" id="slide3-temp-badge">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center">
+                        <h3 class="text-2xl font-bold text-white mb-4">Kelembaban</h3>
+                        <canvas id="slide3-gaugeHumidity" width="300" height="300"></canvas>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-500 text-lg">Normal: <span class="text-gray-300 font-semibold" id="slide3-humidity-normal">-</span>%</p>
+                            <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold" id="slide3-humidity-badge">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center">
+                        <h3 class="text-2xl font-bold text-white mb-4">Tekanan</h3>
+                        <canvas id="slide3-gaugePressure" width="300" height="300"></canvas>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-500 text-lg">Normal: <span class="text-gray-300 font-semibold" id="slide3-pressure-normal">-</span> hPa</p>
+                            <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold" id="slide3-pressure-badge">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 4: Wind & Pressure -->
+            <div class="slide absolute inset-0 p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                    <div class="glass-card rounded-2xl p-8 flex flex-col items-center justify-center">
+                        <i class="fas fa-compass text-8xl text-yellow-400 mb-6"></i>
+                        <p class="text-gray-300 text-3xl mb-4">Arah Angin</p>
+                        <p class="large-stat text-white" id="slide4-windDir">-</p>
+                        <p class="text-gray-400 text-2xl mt-4" id="slide4-windDirText">-</p>
+                        <div class="mt-6">
+                            <p class="text-gray-300 text-2xl mb-2">Kecepatan</p>
+                            <p class="medium-stat text-green-400" id="slide4-windSpeed">-</p>
+                            <p class="text-gray-400 text-xl mb-3">km/jam</p>
+                            <p class="text-gray-500 text-lg">Normal: <span class="text-gray-300 font-semibold" id="slide4-wind-normal">-</span> km/jam</p>
+                            <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold" id="slide4-wind-badge">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-8 flex flex-col items-center justify-center">
+                        <i class="fas fa-compress-arrows-alt text-8xl text-purple-400 mb-6"></i>
+                        <p class="text-gray-300 text-3xl mb-4">Tekanan Udara</p>
+                        <p class="large-stat text-white" id="slide4-pressure">-</p>
+                        <p class="text-gray-400 text-2xl mt-2">hPa</p>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-500 text-xl">Normal: <span class="text-gray-300 font-semibold" id="slide4-pressure-normal">-</span> hPa</p>
+                            <span class="inline-block mt-2 px-4 py-1 rounded-full text-base font-semibold" id="slide4-pressure-badge">-</span>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <p class="text-gray-300 text-xl" id="slide4-pressureStatus">Normal</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 5: Pie Chart & Summary -->
+            <div class="slide absolute inset-0 p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                    <div class="glass-card rounded-2xl p-6">
+                        <h3 class="text-2xl font-bold text-white mb-4">Distribusi Data</h3>
+                        <div style="height: calc(100% - 60px);">
+                            <canvas id="slide5-pieChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card rounded-2xl p-6 flex flex-col justify-center">
+                        <h3 class="text-2xl font-bold text-white mb-6">Ringkasan Kondisi</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+                                <span class="text-gray-300 text-xl">Status Sistem</span>
+                                <span class="text-green-400 font-bold text-xl">Aktif</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+                                <span class="text-gray-300 text-xl">Update Terakhir</span>
+                                <span class="text-white font-bold text-xl" id="slide5-lastUpdate">-</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+                                <span class="text-gray-300 text-xl">Total Data</span>
+                                <span class="text-white font-bold text-xl" id="slide5-totalData">-</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+                                <span class="text-gray-300 text-xl">Interval Update</span>
+                                <span class="text-white font-bold text-xl">5 detik</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Monthly Rainfall Comparison -->
+                        <div class="mt-4 p-3 bg-white/5 rounded-lg overflow-hidden">
+                            <h4 class="text-base font-semibold text-white mb-2">Curah Hujan Bulanan</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-300">Bulan Ini</span>
+                                    <span class="text-white font-bold text-sm" id="slide5-monthly-current">-</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-400">Normal</span>
+                                    <span class="text-gray-300 text-sm" id="slide5-monthly-normal">-</span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="flex justify-between items-center text-xs text-gray-400 mb-1">
+                                        <span>Selisih</span>
+                                        <span class="text-xs whitespace-nowrap" id="slide5-monthly-diff">-</span>
+                                    </div>
+                                    <div class="w-full bg-gray-700 rounded-full h-2 relative" style="overflow: hidden;">
+                                        <div class="h-2 rounded-full transition-all duration-500" id="slide5-monthly-bar" style="width: 0%; max-width: 100%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide Indicator -->
+        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+            <div class="slide-indicator active w-3 h-3 rounded-full bg-blue-400 cursor-pointer" onclick="goToSlide(0)"></div>
+            <div class="slide-indicator w-3 h-3 rounded-full bg-gray-600 cursor-pointer" onclick="goToSlide(1)"></div>
+            <div class="slide-indicator w-3 h-3 rounded-full bg-gray-600 cursor-pointer" onclick="goToSlide(2)"></div>
+            <div class="slide-indicator w-3 h-3 rounded-full bg-gray-600 cursor-pointer" onclick="goToSlide(3)"></div>
+            <div class="slide-indicator w-3 h-3 rounded-full bg-gray-600 cursor-pointer" onclick="goToSlide(4)"></div>
+        </div>
+        
+        <!-- Exit Button (Hidden by default, show on hover) -->
+        <div class="absolute top-4 right-4 opacity-0 hover:opacity-100 transition-opacity">
+            <a href="../index.html" class="glass-card px-4 py-2 rounded-lg text-white hover:bg-white/10">
+                <i class="fas fa-times mr-2"></i>Keluar
+            </a>
+        </div>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/data-simulation.js"></script>
+    <script src="../js/charts.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
+

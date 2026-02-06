@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Data - Data Input</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
+    <!-- Sidebar -->
+    <div class="sidebar fixed left-0 top-0 h-full w-64 p-6">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-white mb-2">Data Input</h1>
+            <p class="text-gray-400 text-sm">Sistem Meteorologi</p>
+        </div>
+        
+        <nav class="space-y-2">
+            <a href="dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white">
+                <i class="fas fa-chart-pie w-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="input-data.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-white">
+                <i class="fas fa-keyboard w-5"></i>
+                <span>Input Data</span>
+            </a>
+            <a href="laporan.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white">
+                <i class="fas fa-file-alt w-5"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="../index.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white mt-8">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span>Keluar</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="ml-64 p-8">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-white mb-2">Input Data Observasi</h2>
+            <p class="text-gray-400">Masukkan data observasi meteorologi</p>
+        </div>
+        
+        <!-- Form Input -->
+        <div class="glass-card rounded-xl p-8 max-w-4xl">
+            <form id="inputForm" onsubmit="submitData(event)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Tanggal & Waktu -->
+                    <div class="md:col-span-2">
+                        <label class="block text-gray-300 text-sm mb-2 font-semibold">
+                            <i class="fas fa-calendar-alt mr-2"></i>Tanggal & Waktu Observasi
+                        </label>
+                        <input type="datetime-local" required class="input-field w-full px-4 py-3 rounded-lg text-white" id="observationDateTime">
+                    </div>
+                    
+                    <!-- Suhu Udara -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2 font-semibold">
+                            <i class="fas fa-thermometer-half mr-2 text-red-400"></i>Suhu Udara (°C)
+                        </label>
+                        <input type="number" step="0.1" min="0" max="50" required class="input-field w-full px-4 py-3 rounded-lg text-white" id="temperature" placeholder="25.5">
+                        <p class="text-gray-500 text-xs mt-1">Range: 0 - 50 °C</p>
+                    </div>
+                    
+                    <!-- Kelembaban Udara -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2 font-semibold">
+                            <i class="fas fa-tint mr-2 text-blue-400"></i>Kelembaban Udara (%)
+                        </label>
+                        <input type="number" step="0.1" min="0" max="100" required class="input-field w-full px-4 py-3 rounded-lg text-white" id="humidity" placeholder="75.0">
+                        <p class="text-gray-500 text-xs mt-1">Range: 0 - 100 %</p>
+                    </div>
+                    
+                    <!-- Curah Hujan -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2 font-semibold">
+                            <i class="fas fa-cloud-rain mr-2 text-cyan-400"></i>Curah Hujan (mm)
+                        </label>
+                        <input type="number" step="0.1" min="0" required class="input-field w-full px-4 py-3 rounded-lg text-white" id="rainfall" placeholder="0.0">
+                        <p class="text-gray-500 text-xs mt-1">Dalam milimeter</p>
+                    </div>
+                    
+                    <!-- Kecepatan Angin -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2 font-semibold">
+                            <i class="fas fa-wind mr-2 text-green-400"></i>Kecepatan Angin (km/jam)
+                        </label>
+                        <input type="number" step="0.1" min="0" required class="input-field w-full px-4 py-3 rounded-lg text-white" id="windSpeed" placeholder="15.0">
+                        <p class="text-gray-500 text-xs mt-1">Dalam kilometer per jam</p>
+                    </div>
+                    
+                    <!-- Arah Angin -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2 font-semibold">
+                            <i class="fas fa-compass mr-2 text-yellow-400"></i>Arah Angin (derajat)
+                        </label>
+                        <input type="number" step="1" min="0" max="360" required class="input-field w-full px-4 py-3 rounded-lg text-white" id="windDirection" placeholder="180">
+                        <p class="text-gray-500 text-xs mt-1">Range: 0 - 360 derajat</p>
+                        <p class="text-blue-400 text-xs mt-1" id="windDirectionText">-</p>
+                    </div>
+                    
+                    <!-- Tekanan Udara -->
+                    <div>
+                        <label class="block text-gray-300 text-sm mb-2 font-semibold">
+                            <i class="fas fa-compress-arrows-alt mr-2 text-purple-400"></i>Tekanan Udara (hPa)
+                        </label>
+                        <input type="number" step="0.1" min="900" max="1100" required class="input-field w-full px-4 py-3 rounded-lg text-white" id="pressure" placeholder="1013.25">
+                        <p class="text-gray-500 text-xs mt-1">Range: 900 - 1100 hPa</p>
+                    </div>
+                    
+                    <!-- Keterangan -->
+                    <div class="md:col-span-2">
+                        <label class="block text-gray-300 text-sm mb-2 font-semibold">
+                            <i class="fas fa-comment-alt mr-2"></i>Keterangan (Opsional)
+                        </label>
+                        <textarea class="input-field w-full px-4 py-3 rounded-lg text-white" id="notes" rows="3" placeholder="Tambahkan catatan atau keterangan tambahan..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mt-8">
+                    <button type="button" onclick="resetForm()" class="flex-1 px-6 py-3 rounded-lg border border-gray-600 text-gray-300 hover:bg-gray-800 font-semibold">
+                        <i class="fas fa-redo mr-2"></i>Reset
+                    </button>
+                    <button type="submit" class="btn-primary flex-1 px-6 py-3 rounded-lg text-white font-semibold">
+                        <i class="fas fa-save mr-2"></i>Simpan Data
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Quick Fill Button -->
+        <div class="mt-6 text-center">
+            <button onclick="fillWithCurrentData()" class="text-blue-400 hover:text-blue-300 text-sm">
+                <i class="fas fa-magic mr-2"></i>Isi dengan Data Saat Ini (Simulasi)
+            </button>
+        </div>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/data-simulation.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="input-data.js"></script>
+</body>
+</html>
+
+

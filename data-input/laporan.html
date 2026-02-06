@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan - Data Input</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-screen">
+    <!-- Sidebar -->
+    <div class="sidebar fixed left-0 top-0 h-full w-64 p-6">
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-white mb-2">Data Input</h1>
+            <p class="text-gray-400 text-sm">Sistem Meteorologi</p>
+        </div>
+        
+        <nav class="space-y-2">
+            <a href="dashboard.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white">
+                <i class="fas fa-chart-pie w-5"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="input-data.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white">
+                <i class="fas fa-keyboard w-5"></i>
+                <span>Input Data</span>
+            </a>
+            <a href="laporan.html" class="sidebar-item active flex items-center gap-3 px-4 py-3 rounded-lg text-white">
+                <i class="fas fa-file-alt w-5"></i>
+                <span>Laporan</span>
+            </a>
+            <a href="../index.html" class="sidebar-item flex items-center gap-3 px-4 py-3 rounded-lg text-gray-300 hover:text-white mt-8">
+                <i class="fas fa-sign-out-alt w-5"></i>
+                <span>Keluar</span>
+            </a>
+        </nav>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="ml-64 p-8">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-white mb-2">Laporan Data Input</h2>
+            <p class="text-gray-400">Riwayat data yang telah diinput</p>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="glass-card rounded-xl p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-gray-300 text-sm mb-2">Tanggal Mulai</label>
+                    <input type="date" class="input-field w-full px-4 py-2 rounded-lg text-white" id="startDate">
+                </div>
+                <div>
+                    <label class="block text-gray-300 text-sm mb-2">Tanggal Akhir</label>
+                    <input type="date" class="input-field w-full px-4 py-2 rounded-lg text-white" id="endDate">
+                </div>
+                <div class="flex items-end">
+                    <button class="btn-primary w-full px-4 py-2 rounded-lg text-white font-semibold" onclick="filterData()">
+                        <i class="fas fa-filter mr-2"></i>Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Report Table -->
+        <div class="glass-card rounded-xl p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-white">Data Input Saya</h3>
+                <button class="btn-primary px-4 py-2 rounded-lg text-white font-semibold" onclick="exportData()">
+                    <i class="fas fa-download mr-2"></i>Export
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="border-b border-gray-700">
+                            <th class="pb-4 text-gray-300 font-semibold">Tanggal & Waktu</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Suhu (°C)</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Kelembaban (%)</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Curah Hujan (mm)</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Kecepatan Angin</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Arah Angin</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Tekanan (hPa)</th>
+                            <th class="pb-4 text-gray-300 font-semibold">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportTableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="laporan.js"></script>
+</body>
+</html>
+
+
